@@ -20,12 +20,8 @@ module topFile(clk,reset);
     RegWrite_top, PCSource_top, AND_out, OR_out;
 
     wire [1:0] ALUOp_top, ALUSrcB_top, ALUSrcA_top; 
-    reg [31:0] InstrReg, DataReg, A, B, ALUOut, OldPC;
-
-    Program_Counter PC(.clk(clk), .reset(reset), .en(OR_out), .PC_in(PC_inTop), .PC_out(PC_outTop));
-    Mux1 PC_Mux(.sel(IorD_top), .i1(PC_outTop), .i2(ALUOut), .out(MemAddr_top));
-    memory Memory(.clk(clk), .WrEn(MemWrite_top), .RdEn(MemRead_top), .addr(MemAddr_top), .WrData(B), .MemData(MemData_top));
-
+    reg [31:0] InstrReg, DataReg, A, B, ALUOut, OldPC; 
+    
     always @(posedge clk or posedge reset) begin
         if(reset) begin
             InstrReg <= 32'd0;
@@ -40,15 +36,10 @@ module topFile(clk,reset);
         else begin
             DataReg <= MemData_top; 
             OldPC <= PC_outTop;
-        end
-            
+        end    
     end
 
-    Mux2 MemDataMux(.sel(MemtoReg_top), .i1(ALUOut), .i2(DataReg), .out(WrData_top));
-    RegistersBlock registerFile(.clk(clk), .wrEn(RegWrite_top), .rdAddr1(InstrReg[19:15]), .rdAddr2(InstrReg[24:20]), 
-    .wrAddr(InstrReg[11:7]), .wrData(WrData_top), .rdData1(rdData1_top), .rdData2(rdData2_top));
-
-
+    
     always @(posedge clk or posedge reset) begin
         if(reset) begin
             A <= 32'd0;
@@ -62,6 +53,13 @@ module topFile(clk,reset);
         end
     end
 
+    Program_Counter PC(.clk(clk), .reset(reset), .en(OR_out), .PC_in(PC_inTop), .PC_out(PC_outTop));
+    Mux1 PC_Mux(.sel(IorD_top), .i1(PC_outTop), .i2(ALUOut), .out(MemAddr_top));
+    memory Memory(.clk(clk), .WrEn(MemWrite_top), .RdEn(MemRead_top), .addr(MemAddr_top), .WrData(B), .MemData(MemData_top));
+
+    Mux2 MemDataMux(.sel(MemtoReg_top), .i1(ALUOut), .i2(DataReg), .out(WrData_top));
+    RegistersBlock registerFile(.clk(clk), .wrEn(RegWrite_top), .rdAddr1(InstrReg[19:15]), .rdAddr2(InstrReg[24:20]), 
+    .wrAddr(InstrReg[11:7]), .wrData(WrData_top), .rdData1(rdData1_top), .rdData2(rdData2_top));
 
     ImmGen ImmeGen(.op(InstrReg[6:0]), .instr(InstrReg), .imm_out(imm_out_top));
     Mux3 A_Mux(.sel(ALUSrcA_top), .i1(PC_outTop), .i2(OldPC), .i3(A), .out(AMux_out));

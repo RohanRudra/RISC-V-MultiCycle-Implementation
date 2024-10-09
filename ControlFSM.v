@@ -41,10 +41,10 @@ MemtoReg, IRWrite, PCSource, ALUOp, ALUSrcB, ALUSrcA, RegWrite);
             s3: nextState = s4;
             s4: nextState = s0;
             s5: nextState = s0;
-            s6: nextState = s7; //after add store in reg
+            s6: nextState = s7; //after add, store in reg
             s7: nextState = s0;
             s8: nextState = s0;
-            s9: nextState = s7; //after addi store in reg
+            s9: nextState = s7; //after addi, store in reg
             s10: nextState = s10;
         endcase
     end
@@ -109,7 +109,7 @@ MemtoReg, IRWrite, PCSource, ALUOp, ALUSrcB, ALUSrcA, RegWrite);
                     PCSource = 1'bx;
                     ALUOp = 2'b00;
                     ALUSrcB = 2'bxx; //here it should be xx
-                    ALUSrcA = 0;
+                    ALUSrcA = 2'bxx; //Trial
                     RegWrite = 0;
                 end
 
@@ -124,9 +124,8 @@ MemtoReg, IRWrite, PCSource, ALUOp, ALUSrcB, ALUSrcA, RegWrite);
                     PCSource = 1'bx;
                     ALUOp = 2'b00;
                     ALUSrcB = 2'bxx; //here it should be xx
-                    ALUSrcA = 0;
+                    ALUSrcA = 2'bxx; //Trial 
                     RegWrite = 1;
-                    //New RegDst
                 end
 
             s5: begin
@@ -140,7 +139,7 @@ MemtoReg, IRWrite, PCSource, ALUOp, ALUSrcB, ALUSrcA, RegWrite);
                     PCSource = 1'bx;
                     ALUOp = 2'b00;
                     ALUSrcB = 2'bxx; //here it should be xx
-                    ALUSrcA = 0;
+                    ALUSrcA = 2'bxx; //Trial
                     RegWrite = 0;
                 end
 
@@ -170,9 +169,8 @@ MemtoReg, IRWrite, PCSource, ALUOp, ALUSrcB, ALUSrcA, RegWrite);
                     PCSource = 1'bx;
                     ALUOp = 2'b00;
                     ALUSrcB = 2'bxx; //here it should be xx
-                    ALUSrcA = 0;
+                    ALUSrcA = 2'bxx; //Trial 
                     RegWrite = 1;
-                    //New RegDst
                 end
 
             s8: begin
@@ -201,7 +199,7 @@ MemtoReg, IRWrite, PCSource, ALUOp, ALUSrcB, ALUSrcA, RegWrite);
                     PCSource = 1'bx;
                     ALUOp = 2'b10;
                     ALUSrcB = 2'b10;
-                    ALUSrcA = 1;
+                    ALUSrcA = 2'b10;
                     RegWrite = 0;
                 end
 
